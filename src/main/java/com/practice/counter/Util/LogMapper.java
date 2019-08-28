@@ -3,7 +3,7 @@ package com.practice.counter.Util;
 import com.practice.counter.model.LogModel;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -56,4 +56,33 @@ public class LogMapper {
         return new LogModel(timestamp, type, message, requestId);
     }
 
+    public void serializeLogModel(LogModel logmodel, String filename) {
+        try ( FileOutputStream file = new FileOutputStream(filename);
+              ObjectOutputStream out = new ObjectOutputStream(file)) {
+
+            out.writeObject(logmodel);
+            out.close();
+            file.close();
+
+            System.out.println("Object has been serialized");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deSerializeLogModel(String filename) {
+        try(FileInputStream file = new FileInputStream(filename);
+            ObjectInputStream in = new ObjectInputStream(file)) {
+
+            LogModel deSerializedLogmodel = (LogModel) in.readObject();
+            in.close();
+            file.close();
+
+            System.out.println("Object has been deserialized ");
+        }
+
+        catch(IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }

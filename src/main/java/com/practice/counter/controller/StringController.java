@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,13 +24,11 @@ public class StringController {
     public String getSubstring(@PathVariable("number") int number) {
         String content = "";
         try {
-            URI uri = ClassLoader.getSystemResource(FILE_NAME).toURI();
-            String mainPath = Paths.get(uri).toString();
-            content = new String(Files.readAllBytes(Paths.get(mainPath)));
+            Path mainPath = Paths.get(ClassLoader.getSystemResource(FILE_NAME).toURI());
+            content = new String(Files.readAllBytes(Paths.get(mainPath.toString())));
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
-
         return content.substring(number, number*2);
     }
 

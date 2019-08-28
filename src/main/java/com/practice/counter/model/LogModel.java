@@ -1,8 +1,9 @@
 package com.practice.counter.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class LogModel {
+public class LogModel implements Serializable {
     private Date date;
     private String type;
     private String message;

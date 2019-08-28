@@ -23,7 +23,6 @@ public class LoggingController {
         this.logMapper = logMapper;
     }
 
-
     @RequestMapping("/filterLog")
     public Map<String, Long> getFilteredLog() throws ParseException {
         String fileName = "practice.log";
