@@ -12,15 +12,14 @@ public class CounterApplication {
     public static void main(String[] args) {
         SpringApplication.run(CounterApplication.class, args);
 
-        ICar ICar = new ICarImpl();
+        IVehicle vehicle = new Vehicle();
+        IEngine engine = new Engine();
         ClassLoader cl = ICar.class.getClassLoader();
-        ICar car = (ICar) Proxy.newProxyInstance(cl,
-                new Class[] {ICar.class}, new GenericLogger(ICar));
+        Class<?>[] interfaces = ICar.class.getInterfaces();
+        ICar car = (ICar) Proxy.newProxyInstance(cl, interfaces , new CarHandler(vehicle, engine));
         car.start();
         car.forward();
         car.backward();
         car.stop();
-
-        IVehicle IVehicleStub = CustomMock.createMock(new IVehicleImpl());
     }
 }

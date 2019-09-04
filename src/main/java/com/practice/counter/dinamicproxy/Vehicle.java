@@ -1,6 +1,6 @@
 package com.practice.counter.dinamicproxy;
 
-public class IVehicleImpl implements IVehicle {
+public class Vehicle implements IVehicle {
 
     @Override
     public void forward() {

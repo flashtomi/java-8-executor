@@ -1,6 +1,6 @@
 package com.practice.counter.dinamicproxy;
 
-public class IEngineImpl implements IEngine {
+public class Engine implements IEngine {
 
     @Override
     public void start() {

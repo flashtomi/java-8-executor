@@ -1,6 +1,6 @@
 package com.practice.counter.dinamicproxy;
 
-public class ICarImpl implements ICar {
+public class Car implements ICar {
 
     @Override
     public void start() {
