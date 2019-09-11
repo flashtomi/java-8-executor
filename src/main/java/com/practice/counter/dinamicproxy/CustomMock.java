@@ -1,25 +1,46 @@
 package com.practice.counter.dinamicproxy;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CustomMock implements InvocationHandler {
 
-    private Object targetObject;
+    private Object originalObject;
+    public ArrayList functionCalls = new ArrayList();
+    public HashMap exceptions = new HashMap();
 
-    public <T> CustomMock(T obj) {
-        targetObject = obj;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> T createMock(T obj) {
-        return (T) java.lang.reflect.Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj
-                .getClass().getInterfaces(), new CustomMock(obj));
+    public CustomMock(Object originalObject)
+    {
+        this.originalObject = originalObject;
     }
 
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        System.out.println("Mocking object");
-        return method.invoke(targetObject, args);
+    public Object invoke(Object proxy, Method method, Object[] args)
+            throws Throwable {
+
+        FunctionCall functionCall = new FunctionCall();
+        functionCall.name = method.getName();
+        functionCall.arguments = args;
+        if (exceptions.containsKey(method.getName())) {
+            Throwable throwable = (Throwable) exceptions.get(method.getName());
+            functionCall.thrownException = throwable;
+            functionCalls.add(functionCall);
+            throw throwable;
+        }
+        Object returnValue = null;
+        try {
+            returnValue = method.invoke(originalObject, args);
+        }
+        catch (InvocationTargetException e) {
+            functionCall.thrownException = e.getTargetException();
+            functionCalls.add(functionCall);
+            throw e.getTargetException();
+        }
+        functionCall.returnValue = returnValue;
+        functionCalls.add(functionCall);
+        return returnValue;
     }
 }

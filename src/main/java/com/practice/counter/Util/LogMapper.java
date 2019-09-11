@@ -45,6 +45,7 @@ public class LogMapper {
             e.printStackTrace();
         }
 
+        serializeLogList(logList, "serializedLog.txt");
         return logList;
     }
 
@@ -56,13 +57,11 @@ public class LogMapper {
         return new LogModel(timestamp, type, message, requestId);
     }
 
-    public void serializeLogModel(LogModel logmodel, String filename) {
+    public void serializeLogList(List<LogModel> log, String filename) {
         try ( FileOutputStream file = new FileOutputStream(filename);
               ObjectOutputStream out = new ObjectOutputStream(file)) {
 
-            out.writeObject(logmodel);
-            out.close();
-            file.close();
+            out.writeObject(log);
 
             System.out.println("Object has been serialized");
         } catch (IOException e) {
@@ -70,13 +69,11 @@ public class LogMapper {
         }
     }
 
-    public void deSerializeLogModel(String filename) {
+    public void deSerializeLogList(String filename) {
         try(FileInputStream file = new FileInputStream(filename);
             ObjectInputStream in = new ObjectInputStream(file)) {
 
-            LogModel deSerializedLogmodel = (LogModel) in.readObject();
-            in.close();
-            file.close();
+            List<LogModel> deSerializedLogList = (List<LogModel>) in.readObject();
 
             System.out.println("Object has been deserialized ");
         }
