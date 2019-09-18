@@ -21,11 +21,8 @@ public class CounterController {
 
     @RequestMapping("/")
     public List<Integer> index() {
-        List<Integer> streamRange = IntStream.range(5, 100)
-                    .boxed()
-                    .collect(Collectors.toList());
 
-        return streamRange.stream().filter(number -> number % 2 == 0).collect(Collectors.toList());
+        return IntStream.range(5, 100).filter(this::isEven).boxed().collect(Collectors.toList());
     }
 
     @RequestMapping("/{number}")
@@ -58,5 +55,9 @@ public class CounterController {
     private static int getRandomNumberInRange(int max) {
         Random rand = new Random();
         return rand.ints(1, (max + 1)).findFirst().getAsInt();
+    }
+
+    private boolean isEven(int number) {
+        return number % 2 == 0;
     }
 }
