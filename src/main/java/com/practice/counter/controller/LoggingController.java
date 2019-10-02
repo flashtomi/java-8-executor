@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -24,7 +23,7 @@ public class LoggingController {
     }
 
     @RequestMapping("/filterLog")
-    public Map<String, Long> getFilteredLog() throws ParseException {
+    public Map<String, Long> getFilteredLog() {
         String fileName = "practice.log";
         List<LogModel> logList = logHandler.mapLogFileToModel(fileName);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd hh:mm:ss");

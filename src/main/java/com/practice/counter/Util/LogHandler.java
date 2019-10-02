@@ -10,21 +10,18 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class LogHandler {
 
     public List<LogModel> mapLogFileToModel(String fileName) {
-        List<String> list;
         Matcher matcher;
         List<LogModel> logList = new ArrayList<>();
 
-        try (Stream<String> fileStream = Files.lines(Paths.get(ClassLoader.getSystemResource(fileName).toURI()))) {
+        try {
+            List<String> file = Files.readAllLines(Paths.get(ClassLoader.getSystemResource(fileName).toURI()));
 
-            list = fileStream.collect(Collectors.toList());
-            for (String line : list) {
+            for (String line : file) {
                 matcher = LogModel.getPatternFullLog().matcher(line);
                 logList.add(LogModel.buildLogModel(matcher));
             }
